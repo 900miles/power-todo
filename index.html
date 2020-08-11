@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html class="h-100">
+<head>
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- CDNJS :: Sortable (https://cdnjs.com/) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+    <!-- CDNJS :: Vue.Draggable (https://cdnjs.com/) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+
+<body class="bg-primary h-100">
+    <div id="app" class="container d-flex justify-content-center align-items-center h-100 py-5">
+        <div id="todoArea" class="bg-light p-3 mh-100 w-50 h-75 rounded">
+            <!-- Add item group -->
+            <div id="inputArea" class="input-group">
+                <input type="text" class="form-control" v-on:keyup.enter="addItem" id="todoInput"></input>
+                <input type="submit" class="btn btn-primary" v-on:click="addItem" value="Add item"></input>
+            </div>
+
+            <!-- Todo list group -->
+            <ol id="todoList" class="list-group list-group-flush my-3 overflow-auto">
+                <draggable v-model="todoList"@start="drag=true" @end="drag=false" @change="saveList" handle=".handle">
+                    <li v-for="(todo, n) in todoList" class="list-group-item">
+                        <div class="d-flex align-items-baseline">
+                            <div class="handle fa float-left mr-2" style="font-size: 1.5em;">::</div>
+                            <input type="checkbox" class="mr-2" v-model="todo.done"/>
+
+                            <input type="text"
+                                v-model="todo.text"
+                                v-on:blur="editing = -1"
+                                v-on:keyup.enter="editing = -1"
+                                v-if="editing === n" />
+                            <span
+                                class="todoText"
+                                v-bind:class="{done: todo.done}"
+                                v-on:click="focusField(n)"
+                                v-else>
+                            {{ todo.text }}
+                            </span>
+
+                            <button type="button" class="btn btn-outline-danger border-0 ml-auto" v-on:click="removeItem(n)">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </div>
+                    </li>
+
+                    <li v-bind:title="message" class="list-group-item active">
+                        Mysterious message...
+                    </li>
+                </draggable>
+            </ol>
+
+            <button class="btn btn-secondary" v-on:click="reverseTodos">Reverse!</button>
+
+            <!-- {{ message }} -->
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>

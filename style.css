@@ -1,0 +1,13 @@
+span.todoText:hover {
+    text-decoration: underline;
+}
+
+.done {
+    text-decoration: line-through;
+    opacity: 55%;
+}
+
+
+#todoList {
+    height: inherit;
+}
